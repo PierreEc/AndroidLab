@@ -1,8 +1,5 @@
 package com.example.androidlab.model
 
-data class Pokemon(val name: String,
-                   val category: String,
-                   val image: String,
-                   val evolution: String)
-
-
+data class Pokemon(val category: String,
+                   val name: Name,
+                   val sprites: Sprites)

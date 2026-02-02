@@ -19,15 +19,15 @@ fun PokemonCard(pokemon: Pokemon) {
     Card {
         Column(modifier = Modifier.fillMaxWidth()) {
             AsyncImage(
-                model = pokemon.image,
-                contentDescription = pokemon.name,
+                model = pokemon.sprites.regular,
+                contentDescription = pokemon.name.fr,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .wrapContentHeight(),
                 contentScale = ContentScale.None
             )
             Text(
-                text = pokemon.name,
+                text = pokemon.name.fr,
                 style = typography.titleMedium,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
