@@ -6,4 +6,8 @@ class PokemonRepository {
     suspend fun getPokemons(): List<Pokemon> {
         return RetrofitClient.api.getPokemons()
     }
+
+    suspend fun getPokemonById(id: Int): Pokemon {
+        return RetrofitClient.api.getPokemonById(id)
+    }
 }
