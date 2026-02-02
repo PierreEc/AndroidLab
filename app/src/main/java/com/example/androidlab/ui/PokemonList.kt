@@ -65,13 +65,6 @@ fun PokemonList(
                 items(pokemons) { pokemon ->
                     PokemonCard(pokemon)
                 }
-
-                item {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Button(onClick = { navController.navigateUp() }) {
-                        Text(text = "Retour")
-                    }
-                }
             }
         }
     }

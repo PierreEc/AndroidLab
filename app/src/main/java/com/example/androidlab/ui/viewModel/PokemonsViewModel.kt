@@ -17,7 +17,12 @@ class PokemonsViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            pokemons = repository.getPokemons()
+            try {
+                pokemons = repository.getPokemons().drop(1)
+            }
+            catch (e: Exception) {
+                pokemons = emptyList()
+            }
         }
     }
 }
