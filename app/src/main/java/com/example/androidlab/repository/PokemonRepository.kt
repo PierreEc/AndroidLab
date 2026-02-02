@@ -1,9 +1,9 @@
-package com.example.androidlab.Repository
+package com.example.androidlab.repository
 
-import com.example.androidlab.Model.Pokemon;
+import com.example.androidlab.model.Pokemon;
 
 class PokemonRepository {
-    fun getPokemons(): List<Pokemon> {
+    suspend fun getPokemons(): List<Pokemon> {
         return listOf(
             Pokemon(
                 "Bulbizarre",

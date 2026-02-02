@@ -23,12 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.androidlab.Repository.PokemonRepository
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.androidlab.ui.viewModel.PokemonsViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-fun PokemonList(navController: NavHostController) {
-    val pokemons = PokemonRepository().getPokemons()
+fun PokemonList(
+    navController: NavHostController,
+    viewModel: PokemonsViewModel = viewModel()
+) {
+    val pokemons = viewModel.pokemons
     Scaffold(
         topBar = {
             TopAppBar(

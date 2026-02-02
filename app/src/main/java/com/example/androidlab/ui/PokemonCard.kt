@@ -1,6 +1,6 @@
 package com.example.androidlab.ui
 
-import com.example.androidlab.Model.Pokemon
+import com.example.androidlab.model.Pokemon
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

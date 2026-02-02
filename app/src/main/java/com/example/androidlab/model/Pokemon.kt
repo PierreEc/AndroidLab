@@ -1,4 +1,4 @@
-package com.example.androidlab.Model
+package com.example.androidlab.model
 
 data class Pokemon(val name: String,
                    val category: String,
