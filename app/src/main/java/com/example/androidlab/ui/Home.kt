@@ -41,12 +41,19 @@ fun Home(navController: NavHostController) {
         Button(
             onClick = { navController.navigate("pokemons") },
             modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
         ) {
             Text(text = "Lister les pokémons")
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         Button(
             onClick = { navController.navigate("quiz/Quiz") },
             modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
         ) {
             Text(text = "Quiz")
         }

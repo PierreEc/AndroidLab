@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidlab.model.Pokemon
 import com.example.androidlab.repository.PokemonRepository
+import com.example.androidlab.model.FeedbackType
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class QuizViewModel : ViewModel() {
@@ -17,7 +19,16 @@ class QuizViewModel : ViewModel() {
     var pokemon by mutableStateOf<Pokemon?>(null)
         private set
 
-    fun getPokemonToQuiz() {
+    var buttonsEnabled by mutableStateOf(true)
+        private set
+    var feedback by mutableStateOf<FeedbackType?>(null)
+        private set
+
+    init {
+        getPokemonToQuiz()
+    }
+
+    private fun getPokemonToQuiz() {
         viewModelScope.launch {
             val random = (1..1025).random()
             pokemon = repository.getPokemonById(random)
@@ -30,6 +41,17 @@ class QuizViewModel : ViewModel() {
                 .shuffled()
                 .take(3)
             answers = (pokemons + randomPokemon).shuffled()
+        }
+    }
+
+    fun verifyAnswer(answer: String) {
+        buttonsEnabled = false
+        feedback = if (answer == pokemon?.name?.fr) FeedbackType.SUCCESS else FeedbackType.ERROR
+        viewModelScope.launch {
+            delay(1500)
+            getPokemonToQuiz()
+            feedback = null
+            buttonsEnabled = true
         }
     }
 }

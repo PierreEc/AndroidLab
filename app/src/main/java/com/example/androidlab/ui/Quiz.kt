@@ -1,30 +1,20 @@
 package com.example.androidlab.ui
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
@@ -32,37 +22,32 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
+import com.example.androidlab.ui.components.FeedbackSnackbar
+import com.example.androidlab.ui.components.QuizTopBar
 import com.example.androidlab.ui.viewModel.QuizViewModel
 
 
 @ExperimentalMaterial3Api
+@Suppress("UNUSED_PARAMETER")
 @Composable
 fun Quiz(navController: NavHostController,
          param: String,
          viewModel: QuizViewModel = viewModel()) {
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.getPokemonToQuiz()
-    }
+
     val pokemon = viewModel.pokemon
     val answers = viewModel.answers
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Quiz") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF9363E0)
-                )
-            )
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(viewModel.feedback) {
+        viewModel.feedback?.let { fb ->
+            snackbarHostState.showSnackbar(fb.message)
         }
+    }
+
+    Scaffold(
+        topBar = { QuizTopBar(navController) },
+        snackbarHost = { FeedbackSnackbar(snackbarHostState, viewModel) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -82,7 +67,8 @@ fun Quiz(navController: NavHostController,
                     contentDescription = pokemon.name.fr,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .wrapContentHeight(),
+                        .wrapContentHeight()
+                        .padding(32.dp),
                     contentScale = ContentScale.None,
                     colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
                 )
@@ -90,36 +76,7 @@ fun Quiz(navController: NavHostController,
                     return@Column
                 }
                 else {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Button(modifier = Modifier.weight(1f), onClick = {}) {
-                                Text(answers[0])
-                            }
-                            Button(modifier = Modifier.weight(1f), onClick = {}) {
-                                Text(answers[1])
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Button(modifier = Modifier.weight(1f), onClick = {}) {
-                                Text(answers[2])
-                            }
-                            Button(modifier = Modifier.weight(1f), onClick = {}) {
-                                Text(answers[3])
-                            }
-                        }
-                    }
+                    AnswersQuiz(viewModel, answers)
                 }
             }
         }
